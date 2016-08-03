@@ -43,6 +43,24 @@ function createScenes() {
     var h = canvas.height;
     createGenerics();
     canvas.scenes.create("play", function() {
+        components.under = canvas.display.rectangle({
+            x: 0,
+            y: 0,
+            width: w,
+            height: h,
+            fill: "#D4A190"
+        });
+        this.add(components.under);
+        components.city = canvas.display.rectangle({
+            x: 0,
+            y: 0,
+            width: w,
+            height: h,
+            fill: "#A1D490"
+        });
+        this.add(components.city);
+    })
+    /*canvas.scenes.create("example", function() {
         components.play = {};
         components.play.tree = QUAD.init({
             x: 5,
@@ -120,7 +138,7 @@ function createScenes() {
                 fill: ["#56B6D6", "#62CCF0", "#4A9AB5"]
             })
         );
-        /*"radial-gradient(center, center, 50% width, #D4A3AC, #C4D4A5, #A3D4CB, #B3A3D4)"*/
+        //"radial-gradient(center, center, 50% width, #D4A3AC, #C4D4A5, #A3D4CB, #B3A3D4)"
         components.play.menu = canvas.display.rectangle({x: -w, y: h / 8, width: w, height: 3 * h / 4, fill: "linear-gradient(45deg, rgb(255,200,200), rgb(230,100,100), rgb(100,150,255), rgb(150,255,100), rgb(255,165,0))"});
         components.play.menu.addChild(createButton("How to Play", w/2, 2*BRICK_HEIGHT, function() {
             canvas.scenes.load("help/1", true);
@@ -164,7 +182,7 @@ function createScenes() {
     });
     canvas.scenes.create("help/1", function () {
         this.add(createTitle("Instructions", w/2, h/16));
-    });
+    });*/
 }
 
 function createButton(_text, _x, _y, callback, options) {
