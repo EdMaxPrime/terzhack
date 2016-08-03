@@ -21,7 +21,7 @@ function init() {
         w: 600,
         h: 400
     });
-    keyBind = {};
+    keyBind = {pause:' '};
     createScenes();
     canvas.scenes.load("play", true);
     canvas.setLoop(update);
@@ -32,6 +32,13 @@ function update(ctx) {
     if(canvas.scenes.current == "") {
         //update logic
     }
+}
+
+function pause() {
+    if(canvas.scenes.current == "pause")
+        canvas.scenes.load("play", true);
+    else 
+        canvas.scenes.load("pause", false);
 }
 
 /*

@@ -59,6 +59,16 @@ function createScenes() {
             fill: "#A1D490"
         });
         this.add(components.city);
+    });
+    canvas.scenes.create("pause", function() {
+        this.add(canvas.display.rectangle({
+            x: w/4, y: h/8, width: w/2, height: 3*h/4, fill: "#fff"
+        }));
+        this.objects[0].addChild(createTitle("PAUSED", w/4, h/4));
+        this.objects[0].addChild(createButton("Resume", w/4, h/2, pause));
+    });
+    canvas.bind("keyup", function(evt) {
+        if(fromKeyCode(evt.which, evt.shiftKey) == keyBind.pause) {pause();}
     })
     /*canvas.scenes.create("example", function() {
         components.play = {};
