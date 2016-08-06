@@ -36,6 +36,27 @@ function createGenerics() {
             })
         }
     };
+    canvas.display.register("road", {
+        shapeType: "rectangular",
+        lanes: 0
+    }, function(ctx) {
+        var origin = this.getOrigin();
+        var x = this.abs_x - origin.x, y = this.abs_y - origin.x, xStart, yStart, xEnd, yEnd;
+        if(this.width > this.height) {xStart = x; xEnd = x + this.width; yStart = y + this.height/2; yEnd = yStart;}
+        else {xStart = x + this.width/2; xEnd = xStart; yStart = y; yEnd = y + this.height;}
+        ctx.beginPath();
+        ctx.fillStyle = "rgb(180,180,180)";
+        ctx.fillRect(x, y, this.width, this.height);
+        if(this.lanes > 1) {
+            ctx.strokeStyle = "#fff";
+            ctx.setLineDash([16, 16]);
+            ctx.lineWidth = 5;
+            ctx.moveTo(xStart, yStart);
+            ctx.lineTo(xEnd, yEnd);
+            ctx.stroke();
+        }
+        ctx.closePath();
+    });
 }
 
 function createScenes() {
@@ -58,7 +79,13 @@ function createScenes() {
             height: h,
             fill: "#A1D490"
         });
+        components.city.tree = QUAD.init({
+            x: 0, y: 0, w: w, h: h, maxChildren: 4
+        });
         this.add(components.city);
+        components.city.addChild(canvas.display.road({
+            x: 0, y: h/3, width: w, height: 40, lanes: 2
+        }));
     });
     canvas.scenes.create("pause", function() {
         this.add(canvas.display.rectangle({
