@@ -48,6 +48,28 @@ function playerLogic() {
             this.u.move(x, y);
         };
     }
+    window.MapTools = {
+        parse : function(str) {
+            /*
+            name,w,h,time
+            "road",x,y,lanes,'v'|'h',length
+            "cp",x,y
+            */
+            var l = str.split("\n");
+            var world = new World();
+            world.a = components.city;
+            world.u = components.under;
+            var ln = l[0].split(",");
+            world.name = ln[0];
+            world.setDimensions(ln[1], ln[2]);
+            for(var i = 1; i < l.length; i++) {
+                ln = l[i].split(",");
+                if(ln[0] == "road") {
+                    
+                }
+            }
+        }
+    };
 })();
 
 /*### Terrain ###*/
