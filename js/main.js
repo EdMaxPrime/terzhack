@@ -22,7 +22,7 @@ function init() {
         w: 600,
         h: 400
     });
-    keyBind = {pause:' ', fwd: ['w','W'], turnR: ['a','A'], turnL: ['d','D']};
+    keyBind = {pause:' ', fwd: ['w','W'], turnR: ['d','D'], turnL: ['a','A']};
     createScenes();
     canvas.scenes.load("play", true);
     canvas.setLoop(update);
@@ -30,8 +30,9 @@ function init() {
 }
 
 function update(ctx) {
-    if(canvas.scenes.current == "") {
+    if(canvas.scenes.current == "play") {
         //update logic
+        components.player.updateCar();
     }
 }
 
