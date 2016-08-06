@@ -25,5 +25,9 @@ function playerLogic() {
     this.idle = !p.gas;
     if(p.left == true) this.rotate(-5);
     if(p.right == true) this.rotate(5);
+    var delta = [this.x, this.y];
     this.drive();
+    delta = [this.x - delta[0], this.y - delta[1]];
+    this.move(-delta[0], -delta[1]);
+    components.city.move(-delta[0], -delta[1]);
 }

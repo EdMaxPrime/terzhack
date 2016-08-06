@@ -86,7 +86,7 @@ function createScenes() {
         components.city.addChild(canvas.display.road({
             x: 0, y: h/3, width: w, height: 40, lanes: 2
         }));
-        components.player = createCar(25, h/3, '#2a2', playerLogic, 5);
+        components.player = createCar(w/2, h/2, '#2a2', playerLogic, 5);
         this.add(components.player);
     });
     canvas.scenes.create("pause", function() {
