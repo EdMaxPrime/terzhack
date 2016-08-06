@@ -1,6 +1,7 @@
 var canvas;
 var tree;
 var keyBind;
+var p = {gas: false, left: false, right: false};
 
 oCanvas.domReady(function() {
     canvas = oCanvas.create({
@@ -21,7 +22,7 @@ function init() {
         w: 600,
         h: 400
     });
-    keyBind = {pause:' '};
+    keyBind = {pause:' ', fwd: ['w','W'], turnR: ['a','A'], turnL: ['d','D']};
     createScenes();
     canvas.scenes.load("play", true);
     canvas.setLoop(update);

@@ -86,6 +86,7 @@ function createScenes() {
         components.city.addChild(canvas.display.road({
             x: 0, y: h/3, width: w, height: 40, lanes: 2
         }));
+        this.add(createCar(25, h/3, '#2a2', function() {move();}, 5));
     });
     canvas.scenes.create("pause", function() {
         this.add(canvas.display.rectangle({
@@ -95,8 +96,18 @@ function createScenes() {
         this.objects[0].addChild(createButton("Resume", w/4, h/2, pause));
     });
     canvas.bind("keyup", function(evt) {
-        if(fromKeyCode(evt.which, evt.shiftKey) == keyBind.pause) {pause();}
-    })
+        var key = fromKeyCode(evt.which, ect.shiftKey);
+        if(key == keyBind.pause) {pause();}
+        if(keyBind.fwd.indexOf(key) != -1) p.gas = false;
+        if(keyBind.turnL.indexOf(key) != -1) p.left = false;
+        if(keyBind.turnR.indexOf(key) != -1) p.right = false;
+    });
+    canvas.bind("keydown", function(evt) {
+        var key = fromKeyCode(evt.which, evt.shiftKey);
+        if(keyBind.fwd.indexOf(key) != -1) p.gas = true;
+        if(keyBind.turnL.indexOf(key) != -1) p.left = true;
+        if(keyBind.turnR.indexOf(key) != -1) p.roght = true;
+    });
     /*canvas.scenes.create("example", function() {
         components.play = {};
         components.play.tree = QUAD.init({
