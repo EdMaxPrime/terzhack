@@ -31,6 +31,24 @@ function playerLogic() {
     this.move(-delta[0], -delta[1]);
     components.city.move(-delta[0], -delta[1]);
 }
+/*### Map ###*/
+(function() {
+    function World() {
+        this.x = 0; this.y = 0;
+        this.w = 0; this.h = 0;
+        this.a; this.u;
+        this.name = "";
+        this.setDimensions = function(w, h) {
+            this.w = w; this.h = h;
+        };
+        this.translate = function(x, y) {
+            this.x += x;
+            this.y += y;
+            this.a.move(x, y);
+            this.u.move(x, y);
+        };
+    }
+})();
 
 /*### Terrain ###*/
 function createCheckpoint(_x, _y) {
