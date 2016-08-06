@@ -31,3 +31,16 @@ function playerLogic() {
     this.move(-delta[0], -delta[1]);
     components.city.move(-delta[0], -delta[1]);
 }
+
+/*### Terrain ###*/
+function createCheckpoint(_x, _y) {
+    var cp = canvas.display.ellipse({
+        x: _x,
+        y: _y,
+        fill: 'radial-gradient(center, center, 60% width, #999, #6dd)',
+        radius: 25,
+        origin: {x: "center", y: "center"},
+        controller: false
+    });
+    return cp;
+}
