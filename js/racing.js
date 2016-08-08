@@ -38,6 +38,7 @@ function playerLogic() {
         this.w = 0; this.h = 0;
         this.a; this.u;
         this.name = "";
+        this.checkpoints = [];
         this.setDimensions = function(w, h) {
             this.w = w; this.h = h;
         };
@@ -46,6 +47,15 @@ function playerLogic() {
             this.y += y;
             this.a.move(x, y);
             this.u.move(x, y);
+        };
+        this.addRoad = function(e) {
+            addToBoth(e, this.a, this.a.tree);
+        };
+        this.addCP = function(e, above) {
+            e.cpIndex = this.checkpoints.length;
+            e.aboveGround = above;
+            this.checkpoints.push(e);
+            addToBoth(e, above? this.a : this.u, above? this.a.tree : this.u.tree);
         };
     }
     window.MapTools = {
@@ -65,7 +75,16 @@ function playerLogic() {
             for(var i = 1; i < l.length; i++) {
                 ln = l[i].split(",");
                 if(ln[0] == "road") {
-                    
+                    world.addRoad(canvas.display.road({
+                        x: parseInt(ln[1]),
+                        y: parseInt(ln[2]),
+                        lanes: parseInt(ln[3]),
+                        width: ((ln[4] == 'v')? lanes * 20 : parseInt(ln[5])),
+                        height: ((ln[4] == 'h')? lanes * 20 : parseInt(ln[5]))
+                    }));
+                }
+                else if(ln[0] == "cp") {
+                    world.addCP(createCheckpoint(parseInt(ln[1]), parseInt(ln[2])), ln[3] == "T");
                 }
             }
         }
