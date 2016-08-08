@@ -29,7 +29,7 @@ function playerLogic() {
     this.drive();
     delta = [this.x - delta[0], this.y - delta[1]];
     this.move(-delta[0], -delta[1]);
-    components.city.move(-delta[0], -delta[1]);
+    components.world.translate(-delta[0], -delta[1]);
 }
 /*### Map ###*/
 (function() {
@@ -56,6 +56,12 @@ function playerLogic() {
             e.aboveGround = above;
             this.checkpoints.push(e);
             addToBoth(e, above? this.a : this.u, above? this.a.tree : this.u.tree);
+        };
+        this.translate = function(_x, _y) {
+            this.x += _x;
+            this.y += _y;
+            this.a.move(_x, _y);
+            this.u.move(_x, _y);
         };
     }
     window.MapTools = {
