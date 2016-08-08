@@ -75,6 +75,7 @@ function playerLogic() {
             for(var i = 1; i < l.length; i++) {
                 ln = l[i].split(",");
                 if(ln[0] == "road") {
+                    var lanes = parseInt(ln[3]);
                     world.addRoad(canvas.display.road({
                         x: parseInt(ln[1]),
                         y: parseInt(ln[2]),
@@ -87,6 +88,7 @@ function playerLogic() {
                     world.addCP(createCheckpoint(parseInt(ln[1]), parseInt(ln[2])), ln[3] == "T");
                 }
             }
+            return world;
         }
     };
 })();
