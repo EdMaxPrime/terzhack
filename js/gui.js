@@ -71,6 +71,9 @@ function createScenes() {
             height: h,
             fill: "#D4A190"
         });
+        components.under.tree = QUAD.init({
+            x: 0, y: 0, w: w, h: h, maxChildren: 4
+        });
         this.add(components.under);
         components.city = canvas.display.rectangle({
             x: 0,
@@ -83,9 +86,7 @@ function createScenes() {
             x: 0, y: 0, w: w, h: h, maxChildren: 4
         });
         this.add(components.city);
-        components.city.addChild(canvas.display.road({
-            x: 0, y: h/3, width: w, height: 40, lanes: 2
-        }));
+        components.world = MapTools.parse("Policebox,"+w+","+h+",day\nroad,0,"+h/3+",2,h,"+w);
         components.player = createCar(w/2, h/2, '#2a2', playerLogic, 5);
         this.add(components.player);
     });
