@@ -11,7 +11,7 @@ function createCar(_x, _y, color, aiUpdate, speed) {
         origin: {x: "center", y: "center"},
         drive: function() {
             if(this.idle == false) {
-                var speedNow = rand(this.maxSpeed + 1);
+                var speedNow = this.maxSpeed;//rand(this.maxSpeed + 1);
                 this.x += speedNow * Math.floor(1000 * Math.cos(-1 * (this.rotation % 360) * Math.PI / 180)) / 1000;
                 this.y += speedNow * Math.floor(1000 * Math.sin((this.rotation % 360) * Math.PI / 180)) / 1000;
             }
@@ -84,7 +84,7 @@ function playerLogic() {
             var all = this.a.tree.select({x:0,y:0,w:this.a.width,h:this.a.height},false);
             for(var i = 0; i < all.length; i++) {
                 all[i].model.addChild(canvas.display.nodemap({
-                    x: -canvas.width/2, y: -canvas.height/2, fill: "red", points: MapTools.triangulate(all[i], 0.05, 0.2)
+                    x: 0, y: 0, fill: "red", points: MapTools.triangulate(all[i], 5, 20)
                 }));
             }
             
@@ -128,18 +128,12 @@ function playerLogic() {
             }
             return world;
         },
-        triangulate: function(rectangle, densityX, densityY) {
+        triangulate: function(rectangle, randomness, gap) {
             var waypoints = [];
-            var intervalX = 1 / densityX, intervalY = 1 / densityY;
-            for(var row = 0; row < rectangle.h / intervalY; row += 1) {
-                if(row % 2 == 0) {
-                    for(var x = 0; x < rectangle.w; x += intervalX) {
-                        waypoints.push(new Waypoint(rectangle.x + x, rectangle.y + row * intervalX));
-                    }
-                } else {
-                    for(var x = intervalX/2; x < rectangle.w; x += intervalX) {
-                        waypoints.push(new Waypoint(rectangle.x + x, rectangle.y + row * intervalY));
-                    }
+            console.log(rectangle.w + ", " + rectangle.h);
+            for(var i = 0; i <= rectangle.w / gap; i++) {
+                for(var j = 0; j <= rectangle.h / gap; j++) {
+                    waypoints.push(new Waypoint(i*gap+rand(-randomness,randomness), j*gap+rand(-randomness,randomness)));
                 }
             }
             return waypoints;
