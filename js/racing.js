@@ -82,12 +82,14 @@ function playerLogic() {
         this.render = function() {
             var p = [];
             var all = this.a.tree.select({x:0,y:0,w:this.a.width,h:this.a.height},false);
+            var waypoints = QUAD.init({x: 0, y: 0, w: this.w, h: this.h, maxChildren: 4});
             for(var i = 0; i < all.length; i++) {
-                all[i].model.addChild(canvas.display.nodemap({
-                    x: 0, y: 0, fill: "red", points: MapTools.triangulate(all[i], 5, 20)
-                }));
+                waypoints.insert(MapTools.randomDots(all[i], 5, 20));
             }
-            
+            MapTools.triangulate(waypoints);
+            this.a.addChild(canvas.display.nodemap({
+                x: 0, y: 0, fill: "red", points: waypoints.select({x:0,y:0,w:this.w,h:this.h}, false), edges: true
+            }));
         }
     }
     function Waypoint(x, y) {
@@ -128,15 +130,33 @@ function playerLogic() {
             }
             return world;
         },
-        triangulate: function(rectangle, randomness, gap) {
+        randomDots: function(rectangle, randomness, gap) {
             var waypoints = [];
             console.log(rectangle.w + ", " + rectangle.h);
             for(var i = 0; i <= rectangle.w / gap; i++) {
                 for(var j = 0; j <= rectangle.h / gap; j++) {
-                    waypoints.push(new Waypoint(i*gap+rand(-randomness,randomness), j*gap+rand(-randomness,randomness)));
+                    waypoints.push(new Waypoint(rectangle.x+i*gap+rand(-randomness,randomness), rectangle.y+j*gap+rand(-randomness,randomness)));
                 }
             }
             return waypoints;
+        },
+        triangulate: function(tree) {
+            var nearby, radius = 5;
+            tree.select({x:tree.root.x, y:tree.root.y, w:tree.root.w, h:tree.root.h}, function(wp) {
+                do {
+                    nearby = tree.select({
+                        x: wp.x - radius,
+                        y: wp.y - radius,
+                        w: wp.w + 2*radius,
+                        h: wp.h + 2*radius
+                    }, false);
+                    radius += 10;
+                } while(nearby.length < 3);
+                nearby.splice(nearby.indexOf(wp), 1);
+                wp.neighbors[0] = nearby[0];
+                wp.neighbors[1] = nearby[1];
+                radius = 5;
+            });
         }
     };
 })();
