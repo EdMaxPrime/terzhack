@@ -29,7 +29,15 @@ function playerLogic() {
     this.drive();
     delta = [this.x - delta[0], this.y - delta[1]];
     this.move(-delta[0], -delta[1]);
-    components.world.translate(-delta[0], -delta[1]);
+    //if left edge free and moving left, or right edge free and moving right
+    if((components.world.x < 0 && delta[0] < 0) || (components.world.x > canvas.width - components.world.w && delta[0] > 0)) {
+        //if playerX >= w/2 and moving right, or playerX <= W/2 and moving
+            components.world.translate(-delta[0], 0);
+    }
+    if((components.world.y < 0 && delta[1] < 0) || (components.world.y > canvas.height - components.world.h && delta[1] > 0)) {
+        //if(this.y > canvas.height/2 - 5 && this.y < canvas.height/2 + 5) {
+            components.world.translate(0, -delta[1]);
+    }
 }
 /*### Map ###*/
 (function() {
@@ -41,6 +49,14 @@ function playerLogic() {
         this.checkpoints = [];
         this.setDimensions = function(w, h) {
             this.w = w; this.h = h;
+            this.a.width = w; this.a.height = h;
+            this.u.width = w; this.u.height = h;
+            this.a.tree = QUAD.init({
+                x: 0, y: 0, w: w, h: h, maxChildren: 4
+            });
+            this.u.tree = QUAD.init({
+                x: 0, y: 0, w: w, h: h, maxChildren: 4
+            });
         };
         this.translate = function(x, y) {
             this.x += x;
@@ -77,21 +93,22 @@ function playerLogic() {
             world.u = components.under;
             var ln = l[0].split(",");
             world.name = ln[0];
-            world.setDimensions(ln[1], ln[2]);
+            var o_x = canvas.width / 2, o_y = canvas.height / 2;
+            world.setDimensions(parseInt(ln[1]) + 2*o_x, parseInt(ln[2]) + 2*o_y);
             for(var i = 1; i < l.length; i++) {
                 ln = l[i].split(",");
                 if(ln[0] == "road") {
                     var lanes = parseInt(ln[3]);
                     world.addRoad(canvas.display.road({
-                        x: parseInt(ln[1]),
-                        y: parseInt(ln[2]),
+                        x: parseInt(ln[1]) + o_x,
+                        y: parseInt(ln[2]) + o_y,
                         lanes: parseInt(ln[3]),
                         width: ((ln[4] == 'v')? lanes * 20 : parseInt(ln[5])),
                         height: ((ln[4] == 'h')? lanes * 20 : parseInt(ln[5]))
                     }));
                 }
                 else if(ln[0] == "cp") {
-                    world.addCP(createCheckpoint(parseInt(ln[1]), parseInt(ln[2])), ln[3] == "T");
+                    world.addCP(createCheckpoint(parseInt(ln[1]) + o_x, parseInt(ln[2])) + o_y, ln[3] == "T");
                 }
             }
             return world;
