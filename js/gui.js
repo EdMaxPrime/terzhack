@@ -59,15 +59,24 @@ function createGenerics() {
     });
     canvas.display.register("nodemap", {
         shapeType: "rectangular",
-        points: []
+        points: [],
+        edges: false
     }, function(ctx) {
         var origin = this.getOrigin();
         var x = this.abs_x - origin.x, y = this.abs_y - origin.y;
         ctx.beginPath();
         ctx.fillStyle = this.fill;
+        ctx.strokeStyle = "black";
         for(var i = 0; i < this.points.length; i++) {
             ctx.fillRect(x + this.points[i].x, y + this.points[i].y, 1, 1);
+            if(4 < 5) {
+                ctx.moveTo(this.points[i].x, this.points[i].y);
+                ctx.lineTo(this.points[i].neighbors[0].x, this.points[i].neighbors[0].y);
+                ctx.moveTo(this.points[i].x, this.points[i].y);
+                ctx.lineTo(this.points[i].neighbors[1].x, this.points[i].neighbors[1].y);
+            }
         }
+        ctx.stroke();
         ctx.closePath();
     });
 }
@@ -99,7 +108,7 @@ function createScenes() {
             x: 0, y: 0, w: w, h: h, maxChildren: 4
         });
         this.add(components.city);
-        components.world = MapTools.parse("Policebox,"+2*w+","+2*h+",day\nroad,0,"+h/3+",2,h,"+w);
+        components.world = MapTools.parse("Policebox,"+2*w+","+2*h+",day\nroad,0,"+h/3+",2,h,"+w+"\nroad,50,"+h/3+",2,v,"+h);
         components.player = createCar(w/2, h/2, '#2a2', playerLogic, 5);
         this.add(components.player);
         components.world.render();
