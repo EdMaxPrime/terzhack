@@ -79,6 +79,21 @@ function playerLogic() {
             this.a.move(_x, _y);
             this.u.move(_x, _y);
         };
+        this.render = function() {
+            var p = [];
+            var all = this.a.tree.select({x:0,y:0,w:this.a.width,h:this.a.height},false);
+            for(var i = 0; i < all.length; i++) {
+                all[i].model.addChild(canvas.display.nodemap({
+                    x: -canvas.width/2, y: -canvas.height/2, fill: "red", points: MapTools.triangulate(all[i], 0.05, 0.2)
+                }));
+            }
+            
+        }
+    }
+    function Waypoint(x, y) {
+        this.x = x; this.y = y;
+        this.w = 1; this.h = 1;
+        this.neighbors = [];
     }
     window.MapTools = {
         parse : function(str) {
@@ -112,6 +127,22 @@ function playerLogic() {
                 }
             }
             return world;
+        },
+        triangulate: function(rectangle, densityX, densityY) {
+            var waypoints = [];
+            var intervalX = 1 / densityX, intervalY = 1 / densityY;
+            for(var row = 0; row < rectangle.h / intervalY; row += 1) {
+                if(row % 2 == 0) {
+                    for(var x = 0; x < rectangle.w; x += intervalX) {
+                        waypoints.push(new Waypoint(rectangle.x + x, rectangle.y + row * intervalX));
+                    }
+                } else {
+                    for(var x = intervalX/2; x < rectangle.w; x += intervalX) {
+                        waypoints.push(new Waypoint(rectangle.x + x, rectangle.y + row * intervalY));
+                    }
+                }
+            }
+            return waypoints;
         }
     };
 })();
