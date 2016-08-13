@@ -157,6 +157,21 @@ function playerLogic() {
                 wp.neighbors[1] = nearby[1];
                 radius = 5;
             });
+        },
+        connectWP: function(a, b) {
+            if(a.neighbors.length == 0) a.neighbors.push(b);
+            else if(a.neighbors.length == 1) {
+                if(a.neighbors[0][0] < this.distance(a, b)) a.neighbors.push([this.distance(a, b), b]);
+                else a.shift([this.distance(a, b), b]);
+            }
+        },
+        distance: function(x1, y1, x2, y2) {
+            if(arguments.length == 2) {
+                x2 = y1.x; y2 = y1.y;
+                var temp = x1.y;
+                x1 = x1.x; y1 = temp;
+            }
+            return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
         }
     };
 })();
