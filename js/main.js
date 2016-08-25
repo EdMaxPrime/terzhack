@@ -83,3 +83,13 @@ function findFirst(haystack, needle) {
     }
     return (lowest == haystack.length)? -1 : lowest;
 }
+
+/*
+Loops through each element in the array and calls
+callback with the index and the element as parameters
+*/
+function foreach(array, callback) {
+    for(var i = 0; i < array.length; i++) {
+        callback(i, array[i]);
+    }
+}
