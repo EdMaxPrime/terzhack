@@ -85,11 +85,30 @@ function findFirst(haystack, needle) {
 }
 
 /*
-Loops through each element in the array and calls
-callback with the index and the element as parameters
+Loops through each element in the array. If
+callback is a function, it will be passed the
+index and element. If callback is an array,
+every event element should be a string and
+the odd ones should be properties of each element.
 */
 function foreach(array, callback) {
-    for(var i = 0; i < array.length; i++) {
-        callback(i, array[i]);
+    if(typeof callback == "function") {
+        for(var i = 0; i < array.length; i++) {
+            callback(i, array[i]);
+        }
+    }
+    else if(callback == "print") {
+        foreach(array, function(index, elem) {
+            console.log(elem);
+        });
+    }
+    else {
+        foreach(array, function(index, elem) {
+            var str = callback[0];
+            for(var i = 1; i < callback.length; i++) {
+                if(i % 2 == 0) str += callback[i].replace("#I#", '' + index);
+                else str += elem[callback[i]];
+            }
+        })
     }
 }
