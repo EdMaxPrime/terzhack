@@ -69,7 +69,8 @@ function createGenerics() {
         ctx.strokeStyle = "black";
         for(var i = 0; i < this.points.length; i++) {
             ctx.fillRect(x + this.points[i].x, y + this.points[i].y, 1, 1);
-            if(4 < 5) {
+            if(this.points[i].neighbors.length > 0) {
+                //console.log(this.points[i]);
                 ctx.moveTo(this.points[i].x, this.points[i].y);
                 ctx.lineTo(this.points[i].neighbors[0].x, this.points[i].neighbors[0].y);
                 ctx.moveTo(this.points[i].x, this.points[i].y);

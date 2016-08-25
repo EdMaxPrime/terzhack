@@ -86,7 +86,7 @@ function playerLogic() {
             for(var i = 0; i < all.length; i++) {
                 waypoints.insert(MapTools.randomDots(all[i], 5, 20));
             }
-            MapTools.triangulate(waypoints);
+            waypoints = MapTools.triangulate(waypoints);
             this.a.addChild(canvas.display.nodemap({
                 x: 0, y: 0, fill: "red", points: waypoints.select({x:0,y:0,w:this.w,h:this.h}, false), edges: true
             }));
@@ -132,7 +132,6 @@ function playerLogic() {
         },
         randomDots: function(rectangle, randomness, gap) {
             var waypoints = [];
-            console.log(rectangle.w + ", " + rectangle.h);
             for(var i = 0; i <= rectangle.w / gap; i++) {
                 for(var j = 0; j <= rectangle.h / gap; j++) {
                     waypoints.push(new Waypoint(rectangle.x+i*gap+rand(-randomness,randomness), rectangle.y+j*gap+rand(-randomness,randomness)));
@@ -153,17 +152,24 @@ function playerLogic() {
                     radius += 10;
                 } while(nearby.length < 3);
                 nearby.splice(nearby.indexOf(wp), 1);
-                wp.neighbors[0] = nearby[0];
-                wp.neighbors[1] = nearby[1];
+                var old1 = wp.neighbors.length, old2 = nearby[0].neighbors.length, old3 = nearby[1].neighbors.length;
+                MapTools.connectWP(wp, nearby[0]);
+                MapTools.connectWP(wp, nearby[1]);
+                //wp.neighbors[0] = nearby[0];
+                //wp.neighbors[1] = nearby[1];
                 radius = 5;
             });
+            return tree;
         },
         connectWP: function(a, b) {
-            if(a.neighbors.length == 0) a.neighbors.push(b);
+            //console.log(a); console.log(b); console.log("----")
+            a.neighbors.push([this.distance(a, b), b]);
+            b.neighbors.push([this.distance(a, b), a]);
+            /*if(a.neighbors.length == 0) a.neighbors.push([this.distance(a, b), b]);
             else if(a.neighbors.length == 1) {
                 if(a.neighbors[0][0] < this.distance(a, b)) a.neighbors.push([this.distance(a, b), b]);
-                else a.shift([this.distance(a, b), b]);
-            }
+                else a.neighbors.shift([this.distance(a, b), b]);
+            }*/
         },
         distance: function(x1, y1, x2, y2) {
             if(arguments.length == 2) {
