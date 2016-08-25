@@ -134,7 +134,7 @@ function playerLogic() {
             var waypoints = [];
             for(var i = 0; i <= rectangle.w / gap; i++) {
                 for(var j = 0; j <= rectangle.h / gap; j++) {
-                    waypoints.push(new Waypoint(rectangle.x+i*gap+rand(-randomness,randomness), rectangle.y+j*gap+rand(-randomness,randomness)));
+                    waypoints.push(new Waypoint(rectangle.x+i*gap, rectangle.y+j*gap));
                 }
             }
             return waypoints;
