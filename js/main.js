@@ -91,10 +91,10 @@ index and element. If callback is an array,
 every event element should be a string and
 the odd ones should be properties of each element.
 */
-function foreach(array, callback) {
+function foreach(array, callback, instance) {
     if(typeof callback == "function") {
         for(var i = 0; i < array.length; i++) {
-            callback(i, array[i]);
+            callback.call(instance, i, array[i]);
         }
     }
     else if(callback == "print") {
@@ -109,6 +109,6 @@ function foreach(array, callback) {
                 if(i % 2 == 0) str += callback[i].replace("#I#", '' + index);
                 else str += elem[callback[i]];
             }
-        })
+        });
     }
 }
