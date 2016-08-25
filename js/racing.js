@@ -104,6 +104,16 @@ function playerLogic() {
                 radius += 5;
             } while(nearby.length < 1);
             return nearby[0];
+        };
+        this.nextPointByAngle = function(wp, degrees) {
+            var closestA, closestI;
+            foreach(wp.neighbors, function(i, e) {
+                if(Math.abs(degrees - Math.atan2(e[1].y - wp.y, e[1].x - wp.x) * 180 / Math.PI) < closestA) {
+                    closestA = Math.abs(degress - Math.atan2(e[1].y - wp.y, e[1].x - wp[1].x) * 180 / Math.PI);
+                    closestI = i;
+                }
+            });
+            return wp.neighbors[i];
         }
     }
     function Waypoint(x, y) {
