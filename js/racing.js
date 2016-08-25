@@ -47,6 +47,7 @@ function playerLogic() {
         this.a; this.u;
         this.name = "";
         this.checkpoints = [];
+        this.waypoints;
         this.setDimensions = function(w, h) {
             this.w = w; this.h = h;
             this.a.width = w; this.a.height = h;
@@ -82,14 +83,27 @@ function playerLogic() {
         this.render = function() {
             var p = [];
             var all = this.a.tree.select({x:0,y:0,w:this.a.width,h:this.a.height},false);
-            var waypoints = QUAD.init({x: 0, y: 0, w: this.w, h: this.h, maxChildren: 4});
+            this.waypoints = QUAD.init({x: 0, y: 0, w: this.w, h: this.h, maxChildren: 4});
             for(var i = 0; i < all.length; i++) {
-                waypoints.insert(MapTools.randomDots(all[i], 5, 20));
+                this.waypoints.insert(MapTools.randomDots(all[i], 5, 20));
             }
-            waypoints = MapTools.triangulate(waypoints);
+            this.waypoints = MapTools.triangulate(this.waypoints);
             this.a.addChild(canvas.display.nodemap({
-                x: 0, y: 0, fill: "red", points: waypoints.select({x:0,y:0,w:this.w,h:this.h}, false), edges: true
+                x: 0, y: 0, fill: "red", points: this.waypoints.select({x:0,y:0,w:this.w,h:this.h}, false), edges: true
             }));
+        };
+        this.locate = function(_x, _y) {
+            var nearby = [], radius = 10;
+            do {
+                nearby = tree.select({
+                    x: _x - radius,
+                    y: _y - radius,
+                    w: 2 * radius,
+                    h: 2 * radius
+                }, false);
+                radius += 5;
+            } while(nearby.length < 1);
+            return nearby[0];
         }
     }
     function Waypoint(x, y) {
@@ -155,8 +169,6 @@ function playerLogic() {
                 var old1 = wp.neighbors.length, old2 = nearby[0].neighbors.length, old3 = nearby[1].neighbors.length;
                 MapTools.connectWP(wp, nearby[0]);
                 MapTools.connectWP(wp, nearby[1]);
-                //wp.neighbors[0] = nearby[0];
-                //wp.neighbors[1] = nearby[1];
                 radius = 5;
             });
             return tree;
