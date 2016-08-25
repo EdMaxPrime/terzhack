@@ -69,13 +69,10 @@ function createGenerics() {
         ctx.strokeStyle = "black";
         for(var i = 0; i < this.points.length; i++) {
             ctx.fillRect(x + this.points[i].x, y + this.points[i].y, 1, 1);
-            if(this.points[i].neighbors.length > 0) {
-                //console.log(this.points[i]);
+            foreach(this.points[i].neighbors, function(index, elem) {
                 ctx.moveTo(this.points[i].x, this.points[i].y);
-                ctx.lineTo(this.points[i].neighbors[0].x, this.points[i].neighbors[0].y);
-                ctx.moveTo(this.points[i].x, this.points[i].y);
-                ctx.lineTo(this.points[i].neighbors[1].x, this.points[i].neighbors[1].y);
-            }
+                ctx.lineTo(elem[1].x, elem[1].y);
+            }, this);
         }
         ctx.stroke();
         ctx.closePath();
