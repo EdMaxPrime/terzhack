@@ -15,7 +15,8 @@ function createCar(_x, _y, color, aiUpdate, speed) {
                 this.x += speedNow * Math.floor(1000 * Math.cos(-1 * (this.rotation % 360) * Math.PI / 180)) / 1000;
                 this.y += speedNow * Math.floor(1000 * Math.sin((this.rotation % 360) * Math.PI / 180)) / 1000;
             }
-        }
+        },
+        state : {}
     });
     car.bind("click tap", function() {console.log(this.rotation);});
     return car;
